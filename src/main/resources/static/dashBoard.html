@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furn-DashBoard</title>
+    <style>
+        /* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Body Background */
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    align-items: center;
+}
+
+/* Header */
+.header {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.header h2 {
+    color: white;
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+
+/* Option Container */
+.option {
+    margin-top: 120px;
+    display: flex;
+    gap: 40px;
+}
+
+/* Buttons */
+.option button {
+    padding: 15px 35px;
+    border: none;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Remove anchor default style */
+.option button a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Hover Effect */
+.option button:hover {
+    transform: translateY(-5px);
+    background: #f1f1f1;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+
+  .main {
+    margin-left: 0;
+    padding: 1.2rem 1rem;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  #toast {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 1rem;
+  }
+}
+/* Topbar Actions Container */
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 20px;
+}
+
+/* Back button small enhancement */
+.topbar-actions .btn {
+    min-width: 90px;
+    justify-content: center;
+    height: 40px;
+    border-radius: 15px;
+}
+
+/* Optional: Make Back slightly different */
+.topbar-actions .btn:first-child {
+    border: 1px solid var(--border);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .topbar-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+
+    .topbar-actions .btn {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Furnize...</h2>
+    </div>
+
+    <div class="topbar-actions">
+        <button class="btn btn-ghost" onclick="history.back()">⬅ Back</button>
+        <button class="btn btn-ghost" id="refresh">🔃 Refresh</button>
+    </div>
+    <div class="option">
+        <button><a href="feedbackList.html">FeedBacks</a></button>
+        <button><a href="getOrders.html">Orders</a></button>
+    </div>
+
+    <script>
+        document.getElementById("refresh").addEventListener("click",()=>{
+            location.reload();
+        })
+    </script>
+</body>
+</html>

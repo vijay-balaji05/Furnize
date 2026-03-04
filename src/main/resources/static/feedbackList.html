@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FeedBack-List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+   *,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #430380;
+  --surface: #181c27;
+  --surface2: #1e2233;
+  --border: #2a3050;
+  --accent: #4f7cff;
+  --accent-hover: #3a66e8;
+  --danger: #e8495a;
+  --danger-hover: #cc3344;
+  --success: #34d399;
+  --text: #e8ecf5;
+  --muted: #6b7594;
+  --tag-bg: rgba(79, 124, 255, 0.12);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+}
+
+/* ── Main ── */
+.main {
+  margin-left: 20px;
+  padding: 2.5rem;
+  min-height: 100vh;
+}
+
+/* ── Top bar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.page-subtitle {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover { background: #252b3e; }
+
+/* ── Stats row ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-top: 0.3rem;
+}
+
+.stat-sub {
+  font-size: 0.75rem;
+  color: var(--success);
+  margin-top: 0.2rem;
+}
+
+/* ── Table card ── */
+.table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-card-header {
+  padding: 1.1rem 1.6rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.table-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.count-badge {
+  background: var(--tag-bg);
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+}
+
+/* ── Table ── */
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+thead th {
+  padding: 0.75rem 1.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 0.95rem 1.2rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.12s; }
+tbody tr:hover { background: var(--surface2); }
+
+.id-cell {
+  font-family: 'Inter', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.email-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #7b5ea7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.msg-cell {
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #a0a8c0;
+  font-size: 0.82rem;
+}
+
+/* ── Delete button ── */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid rgba(232, 73, 90, 0.3);
+  background: rgba(232, 73, 90, 0.08);
+  color: var(--danger);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+
+.btn-delete:hover {
+  background: rgba(232, 73, 90, 0.18);
+  border-color: var(--danger);
+}
+
+.btn-delete:active { transform: scale(0.95); }
+
+/* ── Empty state ── */
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty-state .icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.empty-state p { font-size: 0.85rem; }
+
+/* ── Toast ── */
+#toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  z-index: 999;
+  max-width: calc(100vw - 2rem);
+}
+
+#toast.show { opacity: 1; transform: translateY(0); }
+#toast.success { border-color: var(--success); color: var(--success); }
+#toast.error   { border-color: var(--danger);  color: var(--danger); }
+
+/* ── Row delete animation ── */
+@keyframes fadeRow {
+  to { opacity: 0; transform: translateX(20px); }
+}
+
+.deleting { animation: fadeRow 0.3s forwards; }
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+
+/* Large desktop — 1280px+ (no change, base styles apply) */
+
+/* Desktop — up to 1024px */
+@media (max-width: 1024px) {
+  .main {
+    padding: 2rem 1.5rem;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+}
+
+/* Tablet — up to 768px */
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+    padding: 1.5rem 1rem;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .topbar-actions {
+    width: 100%;
+  }
+
+  .topbar-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-card {
+    padding: 1rem 1.1rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .table-card-header {
+    padding: 0.9rem 1rem;
+  }
+
+  thead th,
+  tbody td {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .msg-cell {
+    max-width: 160px;
+  }
+
+  #toast {
+    right: 1rem;
+    left: 1rem;
+    bottom: 1rem;
+    text-align: center;
+  }
+}
+
+/* Mobile — up to 480px */
+@media (max-width: 480px) {
+  .main {
+    padding: 1rem 0.75rem;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .stat-card {
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .stat-card .stat-label { margin-bottom: 0; }
+  .stat-card .stat-value { font-size: 1.4rem; margin-top: 0; }
+  .stat-card .stat-sub   { display: none; }
+
+  .topbar-actions .btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .table-card {
+    border-radius: 10px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 0.65rem 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.6rem;
+  }
+
+  .btn-delete {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .msg-cell {
+    max-width: 100px;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1 class="page-title">Furn-FeedBack-List</h1>
+        <p class="page-subtitle">Manage and review all customer feedback</p>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" onclick="history.back()">⬅ Back</button>
+        <button class="btn btn-ghost" id="refresh">🔃 Refresh</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Feedback</div>
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-sub">All time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Unique Emails</div>
+        <div class="stat-value" id="statUnique">—</div>
+        <div class="stat-sub">Distinct users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Last Received</div>
+        <div class="stat-value" id="statLast" style="font-size:1.1rem; padding-top:0.4rem;">—</div>
+        <div class="stat-sub">Most recent entry</div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <span class="table-card-title">
+          All Entries <span class="count-badge" id="countBadge">0</span>
+        </span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr>
+            <td colspan="4">
+              <div class="empty-state">
+                <div class="icon">💬</div>
+                <p>Click <strong>Refresh</strong> to load feedback entries.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <script>
+    const BASE = "http://localhost:5050/furn/feedBack";
+
+    function showToast(message, type = "success") {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.className = `show ${type}`;
+      setTimeout(() => { toast.className = ""; }, 3000);
+    }
+
+    function getInitial(email) {
+      return email ? email.charAt(0).toUpperCase() : "?";
+    }
+
+    function renderRows(data) {
+      const rows = document.getElementById("rows");
+      rows.innerHTML = "";
+
+      if (!data.length) {
+        rows.innerHTML = `<tr><td colspan="4"><div class="empty-state"><div class="icon">📭</div><p>No feedback entries found.</p></div></td></tr>`;
+        return;
+      }
+
+      data.forEach(item => {
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-email", item.email);
+        tr.innerHTML = `
+  <td class="id-cell">#${item.id}</td>
+  <td>
+    <div class="email-cell">
+      <div class="avatar">${getInitial(item.email)}</div>
+      <span>${item.email.replace(/(.{2}).*(@.*)/, "$1***$2")}</span>
+    </div>
+  </td>
+  <td class="msg-cell" title="${item.messege}">${item.messege}</td>
+`;
+        rows.appendChild(tr);
+      });
+
+      // Update stats
+      document.getElementById("statTotal").textContent = data.length;
+      document.getElementById("statUnique").textContent = new Set(data.map(d => d.email)).size;
+      document.getElementById("statLast").textContent = data[data.length - 1]?.email?.split("@")[0] ?? "—";
+      document.getElementById("countBadge").textContent = data.length;
+    }
+
+    // Fetch all feedback
+    function loadFeedback() {
+      fetch(`${BASE}/getFeedBack`)
+        .then(res => {
+          if (!res.ok) throw new Error("Failed to fetch");
+          return res.json();
+        })
+        .then(data => {
+          renderRows(data);
+          showToast("✅ Data refreshed", "success");
+        })
+        .catch(err => {
+          console.error(err);
+          showToast("❌ Failed to load feedback", "error");
+        });
+    }
+
+
+
+    document.getElementById("refresh").addEventListener("click", loadFeedback);
+
+    // Auto-load on page open
+    loadFeedback();
+  </script>
+
+</body>
+
+</html>

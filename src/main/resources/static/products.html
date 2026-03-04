@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Furn — Collections</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0f1a;
+      --cream: #131929;
+      --ink: #e8eaf6;
+      --mid: #8892b0;
+      --accent: #c9a84c;
+      --accent-light: #1e1a08;
+      --white: #131929;
+      --shadow: 0 4px 24px rgba(0,0,0,0.45);
+      --shadow-hover: 0 16px 48px rgba(201,168,76,0.18);
+      --radius: 16px;
+    }
+    :root {
+  --sidebar-w: 250px;
+
+  --surface: #0e1322;
+  --card: #1e2640;
+  --border: #1e2640;
+  --border2: #2a3050;
+
+  --text: #e8eaf6;
+  --muted: #8892b0;
+  --dim: #4a5270;
+
+  --accent-dim: rgba(201,168,76,0.1);
+}
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      padding: 0;
+      min-height: 100vh;
+    }
+
+     /* ══════════════════════════════
+       SIDEBAR
+    ══════════════════════════════ */
+    .sidebar {
+      position: fixed;
+      top: 58px; left: 0;
+      width: var(--sidebar-w);
+      height: calc(100vh - 58px);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      z-index: 300;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      overflow-y: auto;
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .sidebar-logo span { color: var(--accent); }
+
+    .sidebar-tagline {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 0.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .nav-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin: 1rem 0 0.4rem 0.6rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.72rem 0.9rem;
+      border-radius: 10px;
+      font-size: 0.87rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+      position: relative;
+    }
+    .nav-item .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+    .nav-item:hover    { background: var(--card); color: var(--text); transform: translateX(4px); }
+    .nav-item.active   { background: var(--accent-dim); color: var(--accent); }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 20%; bottom: 20%;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .sidebar-sep { height: 1px; background: var(--border); margin: 1rem 0; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-footer p {
+      font-size: 0.72rem;
+      color: var(--dim);
+      margin-bottom: 0.8rem;
+      line-height: 1.5;
+    }
+    .btn-sidebar-cta {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--accent);
+      color: #0b0f1a;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border-radius: 9px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .btn-sidebar-cta:hover {
+      background: #dfc06a;
+      box-shadow: 0 4px 18px rgba(201,168,76,0.3);
+    }
+
+    /* Hamburger */
+    /* ══════════════════════════════
+       TOP NAVBAR
+    ══════════════════════════════ */
+    .topnav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 58px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 1.5rem;
+      z-index: 400;
+      gap: 1rem;
+    }
+
+    .topnav-toggle {
+      width: 40px; height: 40px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+      color: var(--text);
+    }
+    .topnav-toggle:hover  { background: var(--border); border-color: var(--accent); }
+    .topnav-toggle.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+
+    .topnav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .topnav-logo span { color: var(--accent); }
+
+    .topnav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      margin-left: 1.5rem;
+    }
+
+    .topnav-link {
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .topnav-link:hover  { background: var(--card); color: var(--text); }
+    .topnav-link.active { color: var(--accent); background: var(--accent-dim); }
+
+    .topnav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .topnav-cta {
+      padding: 0.5rem 1.2rem;
+      background: var(--accent);
+      color: #0b0f1a;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .topnav-cta:hover { background: #dfc06a; }
+
+    @media (max-width: 640px) { .topnav-links { display: none; } }
+
+    .hamburger { display: none; }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 250;
+    }
+    .overlay.show { display: block; }
+
+    /* ── Page Header ── */
+    .page-header {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      background: #0e1322;
+      border-bottom: 1px solid #1e2640;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(181,129,58,0.08) 0%, transparent 70%);
+    }
+
+    .page-header .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+
+    .page-header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 0.8rem;
+    }
+
+    .page-header p {
+      font-size: 0.95rem;
+      color: var(--mid);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 3rem 2.5rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; padding: 1.5rem 1rem; gap: 1.5rem; }
+      .page-header { padding: 2.5rem 1.2rem 2rem; }
+    }
+
+    @media (min-width: 641px) and (max-width: 900px) {
+      .grid { grid-template-columns: repeat(2, 1fr); padding: 2rem 1.5rem; }
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
+      display: flex;
+      flex-direction: column;
+      animation: fadeUp 0.5s ease both;
+      margin-top: 20%;
+
+
+       animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.2s; }
+    .card:nth-child(5) { animation-delay: 0.25s; }
+    .card:nth-child(6) { animation-delay: 0.3s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* ── Slider ── */
+    .slider {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: var(--cream);
+    }
+
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.55s cubic-bezier(0.77, 0, 0.18, 1);
+      will-change: transform;
+    }
+
+    .slides img {
+      min-width: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      flex-shrink: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Dots */
+    .dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      z-index: 2;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,0.6);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: absolute;
+      bottom: 0; left: 0;
+      height: 3px;
+      background: var(--accent);
+      width: 0%;
+      transition: width linear;
+      z-index: 3;
+    }
+
+    /* Category tag */
+    .cat-tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: rgba(28,25,23,0.65);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      z-index: 2;
+    }
+
+    /* ── Card Body ── */
+    .card-body {
+      padding: 1.3rem 1.4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .card-text {
+      font-size: 0.82rem;
+      color: var(--mid);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.6rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid #1e2640;
+    }
+
+    .card-footer .crafted {
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      font-weight: 500;
+    }
+
+    .btn-book {
+      display: inline-block;
+      background: var(--accent);
+      color: #0b0f1a;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 0.55rem 1.2rem;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .btn-book:hover {
+      background: #dfc06a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+    }
+
+    .btn-book:active { transform: translateY(0); }
+
+    .otherBookings {
+      background: #131929;
+      border: 1px solid #1e2640;
+      border-radius: 16px;
+      padding: 2.2rem 2.5rem;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gold top accent line */
+    .otherBookings::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 15%; right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+      border-radius: 2px;
+    }
+
+    .otherBookings h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #e8eaf6;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .otherBookings p {
+      font-size: 0.82rem;
+      color: #8892b0;
+      margin-bottom: 1.6rem;
+      line-height: 1.6;
+    }
+
+    .otherBookings button {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .otherBookings button a {
+      display: block;
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: #c9a84c;
+      color: #0b0f1a;
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border-radius: 10px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .otherBookings button a:hover {
+      background: #dfc06a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201,168,76,0.35);
+    }
+
+    .otherBookings button a:active {
+      transform: translateY(0);
+    }
+
+    
+    /* ── Footer ── */
+    footer {
+      background: #0e1322;
+      border-top: 1px solid #1e2640;
+      padding: 3rem 2.5rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gold glow top */
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20%; right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    }
+
+    .footer-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2.5rem;
+    }
+
+    /* Brand col */
+    .footer-brand .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #e8eaf6;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-brand .logo span { color: #c9a84c; }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: #8892b0;
+      line-height: 1.7;
+      max-width: 240px;
+    }
+
+    /* Social icons */
+    .socials {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+    }
+
+    .social-btn {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: #1e2640;
+      border: 1px solid #2a3050;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .social-btn:hover { background: #c9a84c; border-color: #c9a84c; }
+
+    /* Columns */
+    .footer-col h4 {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #c9a84c;
+      margin-bottom: 1.1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .footer-col ul li a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: #8892b0;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .footer-col ul li a:hover { color: #c9a84c; }
+    .footer-col ul li a .link-icon { font-size: 0.75rem; }
+
+    /* Contact info */
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-item .icon {
+      font-size: 1rem;
+      margin-top: 0.05rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item .info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-item .info span {
+      font-size: 0.72rem;
+      color: #4a5270;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .contact-item .info a,
+    .contact-item .info p {
+      font-size: 0.83rem;
+      color: #8892b0;
+      text-decoration: none;
+      transition: color 0.2s;
+      margin-top: 0.1rem;
+    }
+    .contact-item .info a:hover { color: #c9a84c; }
+
+    /* Divider */
+    .footer-divider {
+      max-width: 1100px;
+      margin: 2.5rem auto 0;
+      border: none;
+      border-top: 1px solid #1e2640;
+    }
+
+    /* Bottom bar */
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 1.2rem auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: #4a5270;
+    }
+
+    .footer-bottom p span { color: #c9a84c; }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 1.2rem;
+    }
+
+    .footer-bottom-links a {
+      font-size: 0.75rem;
+      color: #4a5270;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-bottom-links a:hover { color: #8892b0; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 480px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      footer { padding: 2.5rem 1.2rem 1.2rem; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+   <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- ══ TOP NAVBAR ══ -->
+  <nav class="topnav">
+    <button class="topnav-toggle" id="sidebarToggle" onclick="toggleSidebar()" title="Toggle Menu">☰</button>
+    <h3>Furnize...</h3>
+    <div class="topnav-links">
+      <a class="topnav-link active" href="home.html">Home</a>
+      <a class="topnav-link" href="products.html">Products</a>
+      <a class="topnav-link" href="book.html">Other Bookings</a>
+      <a class="topnav-link" href="feedBack.html">FeedBack</a>
+      <a class="topnav-link" href=dashboard.html">Dashboard</a>
+    </div>
+    <div class="topnav-right">
+      <h3>🛠</h3>
+    </div>
+  </nav>
+
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">Furnize...<span>.</span></div>
+
+    <p class="nav-label">Service</p>
+    <a class="nav-item active" href="home.html"><span class="nav-icon">🏠</span> Home</a>
+    <a class="nav-item" href="products.html"><span class="nav-icon">🪑</span> Products</a>
+    <a class="nav-item" href="feedBack.html"><span class="nav-icon">👉</span> FeedBack</a>
+    <a class="nav-item" href="book.html"><span class="nav-icon">🗂</span> Other Bookings</a>
+    <a class="nav-item" href="dashBoard.html"><span class="nav-icon">🙍‍♂️</span> DashBoard</a>
+
+    <div class="sidebar-sep"></div>
+
+
+  </aside>
+
+
+  <div class="grid">
+
+    <!-- Pooja -->
+    <div class="card">
+      <div class="slider">
+        <span class="cat-tag">Pooja</span>
+        <div class="slides">
+          <img src="https://i.pinimg.com/736x/b0/36/88/b03688681d6aa3723f12f411c826637a.jpg" alt="Pooja 1"/>
+          <img src="https://i.pinimg.com/1200x/ff/5f/69/ff5f69dbd2eb4796210727c188854c2a.jpg" alt="Pooja 2"/>
+          <img src="https://i.pinimg.com/1200x/78/4a/14/784a145cf61c1e786b89a4f15f347940.jpg" alt="Pooja 3"/>
+          <img src="https://i.pinimg.com/736x/37/90/7a/37907a8cf84d51c871801a94af2b266c.jpg" alt="Pooja 4"/>
+        </div>
+        <div class="dots"></div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Pooja Unit</h5>
+        <p class="card-text">Pooja Unit for Home and Office with Pure PlyWood</p>
+        <div class="card-footer">
+          <span class="crafted">✦ Pure Plywood</span>
+          <a href="book.html" class="btn-book">Confirm Booking</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TV -->
+    <div class="card">
+      <div class="slider">
+        <span class="cat-tag">TV Unit</span>
+        <div class="slides">
+          <img src="https://i.pinimg.com/736x/02/05/3f/02053f2b366af9d48fd2fd80bb958b0c.jpg" alt="TV 1"/>
+          <img src="https://i.pinimg.com/736x/b5/5f/b5/b55fb52a733a4705ef2a4df7de03328a.jpg" alt="TV 2"/>
+          <img src="https://i.pinimg.com/1200x/0d/58/45/0d5845a0fe2c1522a4c6ee4c69258202.jpg" alt="TV 3"/>
+          <img src="https://i.pinimg.com/1200x/c2/ef/a4/c2efa4b3c2057e42b63a10ca4ede43bd.jpg" alt="TV 4"/>
+        </div>
+        <div class="dots"></div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">TV Background Unit</h5>
+        <p class="card-text">The essential, stylish focal point of a modern living room, designed to securely hold your television while organizing media devices and hiding cables.</p>
+        <div class="card-footer">
+          <span class="crafted">✦ Pure Plywood</span>
+          <a href="book.html" class="btn-book">Confirm Booking</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kitchen -->
+    <div class="card">
+      <div class="slider">
+        <span class="cat-tag">Kitchen</span>
+        <div class="slides">
+          <img src="https://i.pinimg.com/736x/94/74/89/947489aee1a83c842e840b80979e0ae0.jpg" alt="Kitchen 1"/>
+          <img src="https://i.pinimg.com/736x/f7/92/fb/f792fbf466544d978d41a152ed9e977f.jpg" alt="Kitchen 2"/>
+          <img src="https://i.pinimg.com/1200x/c8/0f/18/c80f1886aa14c5446ce20968d1f67d78.jpg" alt="Kitchen 3"/>
+          <img src="https://i.pinimg.com/736x/bd/49/f6/bd49f6e19c9944a24e0bee5fd29ab912.jpg" alt="Kitchen 4"/>
+        </div>
+        <div class="dots"></div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Kitchen Unit</h5>
+        <p class="card-text">Modular kitchen units are pre-fabricated, customizable storage components designed to optimize kitchen space and organization.</p>
+        <div class="card-footer">
+          <span class="crafted">✦ Pure Plywood</span>
+          <a href="book.html" class="btn-book">Confirm Booking</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terrace -->
+    <div class="card">
+      <div class="slider">
+        <span class="cat-tag">Terrace</span>
+        <div class="slides">
+          <img src="https://i.pinimg.com/736x/ea/f9/f0/eaf9f07d0f9f1535d0237da675fffdd7.jpg" alt="Terrace 1"/>
+          <img src="https://i.pinimg.com/1200x/eb/ca/2b/ebca2b04cd9ed7940c559c67aca6cc04.jpg" alt="Terrace 2"/>
+          <img src="https://i.pinimg.com/736x/44/d2/cc/44d2cce42e797d7de4c810c41fd2db3f.jpg" alt="Terrace 3"/>
+          <img src="https://i.pinimg.com/736x/4b/94/05/4b94055ce5d988fec8b62db31fc156b6.jpg" alt="Terrace 4"/>
+        </div>
+        <div class="dots"></div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Terrace Unit</h5>
+        <p class="card-text">Curated weather-resistant outdoor furniture designed for rooftops, balconies, or patios — where comfort meets the open air.</p>
+        <div class="card-footer">
+          <span class="crafted">✦ Pure Plywood</span>
+          <a href="book.html" class="btn-book">Confirm Booking</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hall -->
+    <div class="card">
+      <div class="slider">
+        <span class="cat-tag">Hall</span>
+        <div class="slides">
+          <img src="https://i.pinimg.com/736x/2f/64/c2/2f64c280bb43191c2b30390553613632.jpg" alt="Hall 1"/>
+          <img src="https://i.pinimg.com/736x/62/63/3c/62633c979a183e7f45969ed14c0fb492.jpg" alt="Hall 2"/>
+          <img src="https://i.pinimg.com/736x/e6/2e/20/e62e20c13c1af340307da3b5bb1ffcdf.jpg" alt="Hall 3"/>
+          <img src="https://i.pinimg.com/1200x/57/08/aa/5708aa968ce9b5bf2a93937da22bc299.jpg" alt="Hall 4"/>
+        </div>
+        <div class="dots"></div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Hall Unit</h5>
+        <p class="card-text">A versatile, space-saving furniture piece designed for entryways and corridors to maximize organization and style.</p>
+        <div class="card-footer">
+          <span class="crafted">✦ Pure Plywood</span>
+          <a href="book.html" class="btn-book">Confirm Booking</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bathroom -->
+    <div class="card">
+      <div class="slider">
+        <span class="cat-tag">Bathroom</span>
+        <div class="slides">
+          <img src="https://i.pinimg.com/736x/f9/f2/1f/f9f21f7c5a2e158920bde91b15a93042.jpg" alt="Bathroom 1"/>
+          <img src="https://i.pinimg.com/1200x/91/73/df/9173df46549a37c14563f1c82443e663.jpg" alt="Bathroom 2"/>
+          <img src="https://i.pinimg.com/736x/0b/da/a9/0bdaa94bb5707d41cbd87a2429a3776f.jpg" alt="Bathroom 3"/>
+          <img src="https://i.pinimg.com/1200x/e3/8a/65/e38a65631b30cfba8c3e71bc2dc40c66.jpg" alt="Bathroom 4"/>
+        </div>
+        <div class="dots"></div>
+        <div class="progress-bar"></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Bathroom Unit</h5>
+        <p class="card-text">Elevate your bathroom with modern, moisture-resistant vanity units and cabinets designed for maximum storage and style.</p>
+        <div class="card-footer">
+          <span class="crafted">✦ Pure Plywood</span>
+          <a href="book.html" class="btn-book">Confirm Booking</a>
+        </div>
+      </div>
+    </div>
+
+   <div class="otherBookings">
+    <h3>Other Bookings</h3>
+    <p>Explore and confirm your other furniture unit bookings.</p>
+    <button>
+      <a href="book.html">Confirm Your Other Booking</a>
+    </button>
+  </div>
+
+    <footer>
+    <div class="footer-grid">
+
+      <!-- Brand -->
+      <div class="footer-brand">
+        <div class="logo">Furn<span>.</span></div>
+        <p>Premium handcrafted furniture units built with pure plywood — designed to complement every corner of your home.</p>
+        <div class="socials">
+          <a class="social-btn" href="#">📘</a>
+          <a class="social-btn" href="#">📸</a>
+          <a class="social-btn" href="#">🐦</a>
+          <a class="social-btn" href="#">▶️</a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html"><span class="link-icon">🏠</span> Home</a></li>
+          <li><a href="products.html"><span class="link-icon">📦</span> Products</a></li>
+          <li><a href="book.html"><span class="link-icon">📋</span> Book Now</a></li>
+          <li><a href="otherBooking.html"><span class="link-icon">🗂</span> Other Bookings</a></li>
+          <li><a href="about.html"><span class="link-icon">ℹ️</span> About Us</a></li>
+        </ul>
+      </div>
+
+    
+
+      <!-- Contact -->
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+
+        <div class="contact-item">
+          <span class="icon">🏠</span>
+          <div class="info">
+            <span>Home</span>
+            <a href="index.html">Visit Homepage</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <span class="icon">✉️</span>
+          <div class="info">
+            <span>Email</span>
+            <a href="mailto:support@furn.com">support@furn.com</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <span class="icon">📞</span>
+          <div class="info">
+            <span>Phone</span>
+            <a href="tel:+919876543210">+91 98765 43210</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <span class="icon">📍</span>
+          <div class="info">
+            <span>Address</span>
+            <p>Chennai, Tamil Nadu, India</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="footer-divider"/>
+
+    <div class="footer-bottom">
+      <p>© 2025 <span>Furn</span>. All rights reserved.</p>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  </div>
+
+ 
+ 
+
+
+  <script>
+    const INTERVAL = 3000; // ms between slides
+
+    document.querySelectorAll('.card').forEach(card => {
+      const slidesEl  = card.querySelector('.slides');
+      const dotsEl    = card.querySelector('.dots');
+      const progressEl = card.querySelector('.progress-bar');
+      const imgs      = slidesEl.querySelectorAll('img');
+      const total     = imgs.length;
+      let current     = 0;
+      let timer       = null;
+
+      // Build dots
+      imgs.forEach((_, i) => {
+        const d = document.createElement('span');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => { goTo(i); resetTimer(); });
+        dotsEl.appendChild(d);
+      });
+
+      const dots = dotsEl.querySelectorAll('.dot');
+
+      function goTo(index) {
+        current = (index + total) % total;
+        slidesEl.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach(d => d.classList.remove('active'));
+        dots[current].classList.add('active');
+        animateProgress();
+      }
+
+      function animateProgress() {
+        progressEl.style.transition = 'none';
+        progressEl.style.width = '0%';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            progressEl.style.transition = `width ${INTERVAL}ms linear`;
+            progressEl.style.width = '100%';
+          });
+        });
+      }
+
+      function next() { goTo(current + 1); }
+
+      function startTimer() {
+        timer = setInterval(next, INTERVAL);
+      }
+
+      function resetTimer() {
+        clearInterval(timer);
+        startTimer();
+      }
+
+      // Pause on hover
+      card.addEventListener('mouseenter', () => clearInterval(timer));
+      card.addEventListener('mouseleave', () => { resetTimer(); });
+
+      // Touch swipe support
+      let touchStartX = 0;
+      slidesEl.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      slidesEl.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) { goTo(current + (diff > 0 ? 1 : -1)); resetTimer(); }
+      }, { passive: true });
+
+      // Kick off
+      goTo(0);
+      startTimer();
+    });
+
+     /* ==============================
+     SIDEBAR TOGGLE
+  ============================== */
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("overlay");
+  const mainContent = document.getElementById("mainContent");
+  const toggleBtn = document.getElementById("sidebarToggle");
+
+  function toggleSidebar() {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("show");
+    mainContent.classList.toggle("shifted");
+    toggleBtn.classList.toggle("active");
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    overlay.classList.remove("show");
+    mainContent.classList.remove("shifted");
+    toggleBtn.classList.remove("active");
+  }
+
+  </script>
+
+</body>
+</html>
