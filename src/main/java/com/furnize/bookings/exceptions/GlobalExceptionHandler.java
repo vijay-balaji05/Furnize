@@ -8,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.furnize.bookings.model.ErrorResponse;
 
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	
@@ -54,6 +55,20 @@ public class GlobalExceptionHandler {
 	
 	
 	
+	@ExceptionHandler(IdNotFoundException.class)
+	public ResponseEntity<ErrorResponse> idNotFoundException(IdNotFoundException excep,
+			WebRequest request){
+		ErrorResponse response=new ErrorResponse(excep.getMessage(),request.getDescription(false),
+				HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ErrorResponse>(response,HttpStatus.NOT_FOUND);
+	}
 	
+	/*
+	 * @ExceptionHandler(Exception.class) public ResponseEntity<ErrorResponse>
+	 * nullFieldException(Exception e, WebRequest request){ ErrorResponse
+	 * errorResponse=new ErrorResponse(e.getMessage(),
+	 * request.getDescription(false), HttpStatus.NO_CONTENT); return new
+	 * ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.NO_CONTENT); }
+	 */
 
 }
