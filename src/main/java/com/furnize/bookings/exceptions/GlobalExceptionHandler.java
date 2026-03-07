@@ -63,12 +63,19 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<ErrorResponse>(response,HttpStatus.NOT_FOUND);
 	}
 	
-	/*
-	 * @ExceptionHandler(Exception.class) public ResponseEntity<ErrorResponse>
-	 * nullFieldException(Exception e, WebRequest request){ ErrorResponse
-	 * errorResponse=new ErrorResponse(e.getMessage(),
-	 * request.getDescription(false), HttpStatus.NO_CONTENT); return new
-	 * ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.NO_CONTENT); }
-	 */
+	@ExceptionHandler(ProductAlreadyExistsException.class)
+	public ResponseEntity<ErrorResponse> productAlreadyExistsException(ProductAlreadyExistsException ph,
+			WebRequest req){
+		ErrorResponse response=new ErrorResponse(ph.getMessage(), req.getDescription(false), HttpStatus.ALREADY_REPORTED);
+		return new ResponseEntity<ErrorResponse>(response,HttpStatus.ALREADY_REPORTED);
+	}
+	
+	@ExceptionHandler(NoProductFoundException.class)
+	public ResponseEntity<ErrorResponse> noProductFoundException(NoProductFoundException ph,
+			WebRequest req){
+		ErrorResponse response=new ErrorResponse(ph.getMessage(), req.getDescription(false), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ErrorResponse>(response,HttpStatus.NOT_FOUND);
+	}
+
 
 }
